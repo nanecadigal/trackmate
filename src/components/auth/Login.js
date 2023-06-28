@@ -1,21 +1,49 @@
 import React from "react";
+import { useState } from "react";
+import axios from "../../axios-api";
+import { Link, useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
+
 import bg from "../../assets/Wavy_Tech-12_Single-11-removebg-preview.png";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!email || !password) {
+      toast.error("Please fill all the fields");
+    }
+
+    try {
+      const response = await axios.post("/login", { email, password });
+      console.log(response.data);
+
+      navigate.push("/dashboard/user");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className="bg-gray-50 min-h-screen flex items-center justify-center">
+      <Toaster position="top-center" reverseOrder={false}></Toaster>
       <div className="bg-cyan-100 flex rounded-2xl shadow-lg max-w-3xl p-5 items-center">
         <div className="md:w-1/2 px-14">
           <h2 className="font-bold text-2xl text-[#195A76]">Login</h2>
           <p className="text-sm mt-4 text-[#195A76]">
             Already a member? Easily log in
           </p>
-          <form className="flex flex-col gap-4">
+          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <input
               type="text"
               name="email"
               placeholder="Email"
               className="p-2 mt-8 rounded-xl border"
+              onChange={(e) => setEmail(e.target.value)}
             />
             <div className="relative">
               <input
@@ -23,6 +51,7 @@ const Login = () => {
                 name="password"
                 placeholder="Password"
                 className="p-2 rounded-xl border w-full"
+                onChange={(e) => setPassword(e.target.value)}
               />
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -36,7 +65,10 @@ const Login = () => {
                 <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" />
               </svg>
             </div>
-            <button className="bg-[#195A76] text-white py-2 rounded-xl hover:scale-105 duration-300">
+            <button
+              type="submit"
+              className="bg-[#195A76] text-white py-2 rounded-xl hover:scale-105 duration-300"
+            >
               Login
             </button>
           </form>
@@ -73,18 +105,18 @@ const Login = () => {
             </svg>
             Login in with Google
           </button>
-          <p className="mt-10 text-xs border-b py-4 border-gray-400">Forgot your password?</p>
+          <p className="mt-10 text-xs border-b py-4 border-gray-400">
+            Forgot your password?
+          </p>
           <div className="mt-3 text-sm flex justify-between items-center">
             <p>No account yet?</p>
-            <button className="py-2 px-5 bg-white border rounded-xl hover:scale-110 duration-300">Register</button>
+            <button className="py-2 px-5 bg-white border rounded-xl hover:scale-110 duration-300">
+              <Link to="/register">Register</Link>
+            </button>
           </div>
         </div>
         <div className="md:block hidden w-1/2">
-          <img
-            src={bg}
-            alt="Time Tracker"
-            className="rounded-2xl"
-          />
+          <img src={bg} alt="Time Tracker" className="rounded-2xl" />
         </div>
       </div>
     </div>
