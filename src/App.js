@@ -1,6 +1,6 @@
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
-import Profiles from "./components/dashboard/Profiles";
+import Profile from "./components/profile/Profile";
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 const router = createBrowserRouter([
@@ -17,8 +17,8 @@ const router = createBrowserRouter([
     element: <Login />
   },
   {
-    path: '/dashboard/user',
-    element: <Profiles />
+    path: '/dashboard',
+    element: <Profile />
   }
 ])
 function App() {
