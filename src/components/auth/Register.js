@@ -21,7 +21,7 @@ const Register = () => {
     try {
       // Make POST request to create user
       const response = await axios.post('/register', { firstName, lastName, companyName, email, password })
-      console.log(response.data); // User created successfully
+      console.log(response.data);
 
       // Reset form fields
       setFirstName("");
@@ -30,6 +30,7 @@ const Register = () => {
       setEmail("");
       setPassword("");
     } catch (error) {
+      toast.error("Failed to create user");
       console.error("Failed to create user:", error);
     }
   };

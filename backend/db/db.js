@@ -10,7 +10,7 @@ const connOptions = {
   useUnifiedTopology: true,
 };
 
-const connStr = `mongodb+srv://${mongoUser}:${password}@cluster0.cwkvvvt.mongodb.net/${dbName}?retryWrites=true&w=majority`;
+const connStr = `mongodb+srv://${mongoUser}:${password}@nanbase.4r1w0lk.mongodb.net/${dbName}?retryWrites=true&w=majority`;
 
 const connectDB = () => {
   console.log("connecting to db....");
