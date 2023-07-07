@@ -3,10 +3,11 @@ import Register from "./components/auth/Register";
 import Profile from "./components/profile/Profile";
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import Landing from "./pages/Landing";
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <div>Landing Page</div>
+    element: <Landing />
   },
   {
     path: '/register',
