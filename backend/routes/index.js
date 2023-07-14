@@ -1,13 +1,17 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-/**
- * User related Endpoints.
- */
-const registerUser = require("./users/register");
-const login = require("./users/login")
+// POST routes
+const login = require("./users/login");
+const register = require("./users/register");
 
-router.use(registerUser);
+// GET routes
+const getUsers = require("./users/getUsers");
+const getUser = require("./users/getUser");
+
 router.use(login);
+router.use(register);
+router.use(getUsers);
+router.use(getUser);
 
 module.exports = router;
