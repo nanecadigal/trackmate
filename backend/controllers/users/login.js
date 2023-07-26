@@ -1,7 +1,9 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const User = require("../../models/Users");
+const secret = process.env.AUTH_SECRET;
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
@@ -17,6 +19,7 @@ exports.login = async (req, res) => {
         .send({ message: "This email does not exists", status: false });
     }
 
+    // check if the password match
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
       return res
@@ -24,9 +27,9 @@ exports.login = async (req, res) => {
         .send({ message: "Invalid credentials", status: false });
     }
 
-    const token = jwt.sign({ email }, "myJWTPass123456");
+    const token = jwt.sign({ email }, secret);
 
-    res.json({ token });
+    res.status(200).json({ user: user.toObject(), token });
   } catch (err) {
     console.error(err);
     res.status(500).send({

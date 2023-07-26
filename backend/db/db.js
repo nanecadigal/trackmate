@@ -1,3 +1,4 @@
+const colors = require("colors");
 const mongoose = require("mongoose");
 
 require("dotenv").config();
@@ -13,11 +14,11 @@ const connOptions = {
 const connStr = `mongodb+srv://${mongoUser}:${password}@nanbase.4r1w0lk.mongodb.net/${dbName}?retryWrites=true&w=majority`;
 
 const connectDB = () => {
-  console.log("connecting to db....");
+  console.log("Connecting to db....".yellow);
 
   mongoose
     .connect(connStr, connOptions)
-    .then(() => console.log("Connected to MongoDB"))
+    .then(() => console.log("Connected to MongoDB".italic.green))
     .catch((err) => {
       if (err) {
         console.error("cant connect", err);

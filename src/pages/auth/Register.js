@@ -1,19 +1,64 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "../../axios-api";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import Loading from "../../components/Loading";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Register = () => {
+  const { dispatch } = useAuthContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(email, password, firstname, lastname);
+
+    if (!firstname || !lastname || !email || !password) {
+      toast.error("Please fill all the fields");
+    }
+
+    try {
+      const response = await axios.post("/register", {
+        firstname,
+        lastname,
+        email,
+        password,
+      });
+      console.log(response);
+      setLoading(true);
+
+      if (!response.data.success) {
+        setLoading(false);
+        setError(response.error);
+      } else {
+        // Save the user to the local storage
+        localStorage.setItem("trackmate", JSON.stringify(response.data.token));
+
+        // Update the auth context
+        dispatch({ type: "LOGIN", payload: response.data });
+        setLoading(false);
+      }
+
+      setEmail("");
+      setPassword("");
+      setFirstName("");
+      setLastName("");
+
+      toast.success("User created successfully!");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <div className="bg-gray-100 md:bg-white h-screen flex items-center justify-center">
+      {loading ?? <Loading />}
+      <ToastContainer />
       <div className="px-14 md:bg-gray-100 flex flex-col items-center justify-center rounded-lg">
         <img alt="Trackmate Logo" className="my-10" />
         <form
@@ -22,27 +67,28 @@ const Register = () => {
         >
           <input
             type="text"
-            name="firstname"
+            value={firstname}
             placeholder="Firstname"
             className="rounded p-2 focus:outline-none w-full"
             onChange={(e) => setFirstName(e.target.value)}
           />
           <input
             type="text"
-            name="lastname"
+            value={lastname}
             placeholder="Lastname"
             className="rounded p-2 focus:outline-none w-full"
             onChange={(e) => setLastName(e.target.value)}
           />
           <input
             type="email"
-            name="email"
+            value={email}
             placeholder="Email"
             className="rounded p-2 focus:outline-none w-full"
             onChange={(e) => setEmail(e.target.value)}
           />
           <input
             type="password"
+            value={password}
             placeholder="Password"
             className="rounded p-2 focus:outline-none w-full"
             onChange={(e) => setPassword(e.target.value)}
@@ -53,6 +99,7 @@ const Register = () => {
           >
             Create Account
           </button>
+          {error && <div className="text-red-500">{error}</div>}
           <p className="text-sm text-center">
             By signing up you agree to our{" "}
             <span>

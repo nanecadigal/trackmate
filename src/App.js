@@ -9,15 +9,16 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Landing from "./pages/static/Landing";
 import Dashboard from "./layouts/Dashboard";
-import Employees from "./pages/auth/Employees";
-import Timecards from "./pages/auth/Timecards";
-import Location from "./pages/auth/Location";
-import Reports from "./pages/auth/Reports";
-import Schedules from "./pages/auth/Schedules";
+import Employees from "./pages/auth/admin/Employees";
+import Timecards from "./pages/auth/admin/Timecards";
+import Location from "./pages/auth/admin/Location";
+import Reports from "./pages/auth/admin/Reports";
+import Schedules from "./pages/auth/admin/Schedules";
 
 import UnauthenticatedRoutes from "./utils/UnAuthorized";
 import AuthenticatedRoutes from "./utils/Authorized";
-import Overview from "./pages/auth/Overview";
+import Overview from "./pages/auth/admin/Overview";
+import TimeEntry from "./pages/auth/client/TimeEntry";
 
 const router = createBrowserRouter([
   { path: "/", element: <Landing /> },
@@ -53,13 +54,13 @@ const router = createBrowserRouter([
         private: true,
         admin: true,
       },
+      {
+        path: "checkin",
+        element: <TimeEntry />,
+        private: true,
+        admin: true,
+      },
     ],
-  },
-  {
-    path: "/schedule",
-    element: <Schedules />,
-    private: true,
-    admin: false,
   },
 ]);
 
@@ -92,6 +93,14 @@ function App() {
           <Route path="app/employees" element={<Employees />} />
           <Route path="app/timecards" element={<Timecards />} />
           <Route path="app/reports" element={<Reports />} />
+        </AuthenticatedRoutes>
+        <AuthenticatedRoutes
+          path="/app/*"
+          private={true}
+          admin={false}
+          element={<Dashboard />}
+        >
+          <Route path="app/checkin" element={<TimeEntry />} />
         </AuthenticatedRoutes>
       </Routes>
     </RouterProvider>

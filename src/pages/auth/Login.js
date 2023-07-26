@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "../../axios-api";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
+  const { dispatch } = useAuthContext();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,15 +17,26 @@ const Login = () => {
     e.preventDefault();
 
     if (!email || !password) {
-      console.log("Please fill all the fields");
+      toast.error("Please fill all the fields");
     }
 
     try {
       const response = await axios.post("/login", { email, password });
-      console.log(response.data);
+      const { user, token } = response.data;
 
-      localStorage.setItem("token", response.data.token);
-      navigate("/app/overview");
+      localStorage.setItem("token", token);
+      dispatch({ type: "LOGIN", payload: user });
+
+      if (user.isAdmin) {
+        navigate("/app/overview");
+      } else {
+        navigate("/app/checkin");
+      }
+
+      console.log(user);
+
+      setEmail("");
+      setPassword("");
     } catch (err) {
       console.error(err);
     }
@@ -29,6 +44,7 @@ const Login = () => {
 
   return (
     <div className="bg-gray-100 md:bg-white h-screen flex items-center justify-center">
+      <ToastContainer />
       <div className="px-14 py-6 md:bg-gray-100 flex flex-col items-center justify-center rounded-lg">
         <img alt="Trackmate Logo" className="my-10" />
         <form
@@ -104,7 +120,7 @@ const Login = () => {
           </button>
         </div>
         <p className="text-sm">&copy; Trackmate. All Rights Reserved</p>
-        <p className="text-sm">Version: 1.1.1.1</p>
+        <p className="text-sm">Version: 1.0.0</p>
       </div>
     </div>
   );

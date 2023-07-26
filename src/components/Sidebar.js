@@ -7,7 +7,7 @@ import profileImg from "../assets/images/kisspng-computer-icons-avatar-social-me
 
 const Sidebar = (props) => {
   const openSidebar = props.openSidebar;
-  const isAdmin = props.isAdmin;
+  const isAdmin = true;
 
   const navLists = isAdmin ? adminRoutes : userRoutes;
   return (
@@ -15,12 +15,12 @@ const Sidebar = (props) => {
       <div
         className={`${
           openSidebar ? "hidden" : ""
-        } md:block w-full md:w-72 h-screen border-r border-2 border-gray-100 fixed top-0 left-0 z-40 pt-20 bg-gray-100 md:bg-white`}
+        } md:block w-3/4 md:w-72 h-screen border-r border-2 border-gray-100 fixed top-0 left-0 z-40 pt-20 bg-gray-100 md:bg-white`}
       >
         <div className="pt-4 px-8 flex flex-col gap-4">
           {isAdmin ? (
             <div className="flex flex-col items-center space-y-3">
-              <img src={profileImg} alt="Profile" />
+              <img src={profileImg} alt="Profile" className="w-60" />
               <h1 className="text-lg">Admin</h1>
             </div>
           ) : null}
@@ -43,6 +43,7 @@ const Sidebar = (props) => {
         <p className="text-xs text-center">Version: 1.1.1.1</p> */}
         </div>
       </div>
+      <Outlet />
     </>
   );
 };

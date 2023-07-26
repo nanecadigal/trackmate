@@ -5,8 +5,8 @@ const Navbar = () => {
   const [open, setOpen] = useState(true);
   return (
     <nav className="bg-white sticky inset-0 z-10 border border-white/80 bg-opacity-80 shadow-md backdrop-blur-2xl">
-      <div className="flex items-center justify-between max-w-screen p-2 mx-auto flex-wrap">
-        <div>Trackmate</div>
+      <div className="flex items-center justify-between max-w-screen p-2 md:px-10 mx-auto flex-wrap">
+        <h1 className="text-2xl">Trackmate</h1>
         <button
           type="button"
           className="flex items-center w-10 h-10 rounded hover:bg-gray-100 justify-center focus:outline-none md:hidden"

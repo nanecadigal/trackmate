@@ -7,11 +7,11 @@ const register = require("./users/register");
 
 // GET routes
 const getUsers = require("./users/getUsers");
-const getUser = require("./users/getUser");
+const getMe = require("./users/getMe");
 
 router.use(login);
 router.use(register);
 router.use(getUsers);
-router.use(getUser);
+router.use(getMe);
 
 module.exports = router;

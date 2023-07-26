@@ -1,17 +1,48 @@
-import { useState } from "react";
-import Sidebar from '../components/Sidebar'
-
-import { Outlet } from "react-router-dom";
+import { useEffect, useState, useContext } from "react";
+import Sidebar from "../components/Sidebar";
+import axios from "../axios-api";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 const Dashboard = () => {
+  const { dispatch } = useAuthContext();
   const [open, setOpen] = useState(false);
+  const [data, setData] = useState(null);
 
-  const isAuthenticated = false;
-  const user = {
-    firstname: "Hernane",
-    lastname: "Cadigal",
-    isAdmin: true,
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    dispatch({ type: "LOGOUT" });
   };
+
+  const fetchUserData = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      axios
+        .get("/getMe", config)
+        .then((response) => {
+          const userData = response.data;
+          setData(userData);
+          console.log(userData);
+        })
+        .catch((error) => {
+          // Handle error here
+          console.log(error);
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
   return (
     <>
       <nav className="bg-white bg-opacity-80 border-2 border-b border-gray-100 fixed top-0 left-0 z-50 w-full">
@@ -65,13 +96,12 @@ const Dashboard = () => {
               />
             </svg>
             <p className="hidden md:block">
-              {user.firstname} {user.lastname}
+              {/* {user.firstname} {user.lastname} */}
             </p>
           </div>
         </div>
       </nav>
-      <Sidebar openSidebar={open} isAdmin={user.isAdmin} />
-      <Outlet />
+      <Sidebar openSidebar={open} user={data} />
     </>
   );
 };
