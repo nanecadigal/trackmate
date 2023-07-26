@@ -11,6 +11,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPass] = useState(true);
+  const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
@@ -33,7 +34,7 @@ const Login = () => {
         navigate("/app/checkin");
       }
 
-      console.log(user);
+      setUser(user);
 
       setEmail("");
       setPassword("");
